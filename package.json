@@ -1,0 +1,35 @@
+{
+  "name": "n17-tooltip",
+  "version": "0.0.1",
+  "description": "Angular Directive to display a tooltip",
+  "main": "main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wooderz/tooltip-directive.git"
+  },
+  "keywords": [
+    "n17"
+  ],
+  "author": "James Woodley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wooderz/tooltip-directive/issues"
+  },
+  "homepage": "https://github.com/wooderz/tooltip-directive",
+  "devDependencies": {
+    "browserify": "^10.2.1",
+    "browserify-ngannotate": "^0.7.3",
+    "del": "^1.2.0",
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-uglify": "^1.2.0",
+    "run-sequence": "^1.1.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}

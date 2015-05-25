@@ -1,0 +1,28 @@
+{
+  "name": "n17-tooltip",
+  "version": "0.0.1",
+  "authors": [
+    "James Woodley <info@n17solutions.com>"
+  ],
+  "description": "Angular Directive to display a tooltip",
+  "main": "main.js",
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "n17"
+  ],
+  "license": "MIT",
+  "homepage": "http://n17.solutions",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~2.1.4",
+    "qtip2": "~2.2.1"
+  }
+}
