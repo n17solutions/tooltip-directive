@@ -19,7 +19,9 @@
     "tests",
     "js",
     "stylus",
-    "templates"
+    "templates",
+    "./gulpfile.js",
+    "./package.json"
   ],
   "devDependencies": {
     "jquery": "~2.1.4",
