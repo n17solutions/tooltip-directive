@@ -20,10 +20,10 @@
     "js",
     "stylus",
     "templates",
-    "./gulpfile.js",
-    "./package.json"
+    "gulpfile.js",
+    "package.json"
   ],
-  "devDependencies": {
+  "dependencies": {
     "jquery": "~2.1.4",
     "qtip2": "~2.2.1"
   }
