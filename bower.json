@@ -6,9 +6,6 @@
   ],
   "description": "Angular Directive to display a tooltip",
   "main": "main.js",
-  "moduleType": [
-    "es6"
-  ],
   "keywords": [
     "n17"
   ],
@@ -19,7 +16,10 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "js",
+    "stylus",
+    "templates"
   ],
   "devDependencies": {
     "jquery": "~2.1.4",
