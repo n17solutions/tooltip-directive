@@ -19,8 +19,10 @@ gulp.task('cleanOutput', function() {
 });
 
 gulp.task('browserify', function() {
-	return browserify('./js/app.js', { 
-			debug: true
+	return browserify('./js/app.js', {
+			// list of modules to make require-able externally
+			require: ['jquery', 'angular'],
+			standalone: 'n17-tooltip'
 		})
 		.bundle()
 		.pipe(source('app.js'))
