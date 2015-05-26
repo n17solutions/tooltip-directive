@@ -1,13 +1,10 @@
 {
   "name": "n17-tooltip",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Angular Directive to display a tooltip",
   "main": "main.js",
   "directories": {
     "test": "test"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -25,11 +22,32 @@
   "devDependencies": {
     "browserify": "^10.2.1",
     "browserify-ngannotate": "^0.7.3",
+    "browserify-shim": "^3.8.7",
     "del": "^1.2.0",
     "gulp": "^3.8.11",
     "gulp-concat": "^2.5.2",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.2.0",
     "run-sequence": "^1.1.0",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "browser": {
+    "angular": "./bower_components/angular/index.js",
+    "jquery": "./bower_components/jquery/dist/jquery.js",
+    "qtip2": "./bower_components/qtip2/jquery.qtip.js"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim",
+      "browserify-ngannotate"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "$",
+    "qtip2": {
+      "depends": [
+        "jquery:jQuery"
+      ]
+    }
   }
 }
