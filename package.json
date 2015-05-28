@@ -1,6 +1,6 @@
 {
   "name": "n17-tooltip",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Angular Directive to display a tooltip",
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/wooderz/tooltip-directive",
   "devDependencies": {
     "browserify": "^10.2.1",
+    "browserify-ngannotate": "^0.7.3",
     "browserify-shim": "^3.8.7",
     "del": "^1.2.0",
     "gulp": "^3.8.11",
@@ -37,7 +38,8 @@
   },
   "browserify": {
     "transform": [
-      "browserify-shim"
+      "browserify-shim",
+      "browserify-ngannotate"
     ]
   },
   "browserify-shim": {

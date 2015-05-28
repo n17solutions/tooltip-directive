@@ -25,7 +25,9 @@ gulp.task('cleanOutput', function() {
 
 gulp.task('browserify', function() {
 	return browserify(app.src.js + '/app.js')
-		//.external('angular')
+		.external('angular')
+		.external('jquery')
+		.external('qtip2')
 		.bundle()
 		.pipe(source('app.js'))
 		.pipe(gulp.dest(app.output));
