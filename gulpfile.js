@@ -29,7 +29,9 @@ gulp.task('browserify', function() {
 			entries: app.src.js + '/app.js',
 			standalone: 'n17tooltip'
 		})
-		.require('angular')
+		.exclude('angular')
+		.exclude('jquery')
+		.exclude('qtip2')
 		.bundle()
 		.pipe(source('app.js'))
 		.pipe(derequire())
