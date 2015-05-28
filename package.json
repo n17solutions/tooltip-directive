@@ -1,6 +1,6 @@
 {
   "name": "n17-tooltip",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Angular Directive to display a tooltip",
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
   },
   "browser": {
     "angular": "./bower_components/angular/angular.js",
-    "jquery": "./node_modules/jquery/dist/jquery.js",
+    "jquery": "./bower_components/jquery/dist/jquery.js",
     "qtip2": "./bower_components/qtip2/jquery.qtip.js"
   },
   "browserify": {
@@ -56,7 +56,5 @@
       ]
     }
   },
-  "dependencies": {
-    "jquery": "^2.1.4"
-  }
+  "dependencies": {}
 }
