@@ -1,6 +1,7 @@
 var gulp 		= require('gulp'),
 	del			= require('del'),
 	browserify 	= require('browserify'),
+	derequire 	= require('gulp-derequire'),
 	source 		= require('vinyl-source-stream'),
 	concat		= require('gulp-concat'),
 	uglify		= require('gulp-uglify'),
@@ -24,12 +25,14 @@ gulp.task('cleanOutput', function() {
 });
 
 gulp.task('browserify', function() {
-	return browserify(app.src.js + '/app.js')
-		.external('angular')
-		.external('jquery')
-		.external('qtip2')
+	//return browserify(app.src.js + '/app.js')
+	return browserify({
+			entries: app.src.js + '/app.js',
+			standalone: 'n17tooltip'
+		})
 		.bundle()
 		.pipe(source('app.js'))
+		.pipe(derequire())
 		.pipe(gulp.dest(app.output));
 });
 

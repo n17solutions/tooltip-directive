@@ -1,10 +1,12 @@
-<html ng-app="n17-tooltip">
+<html ng-app="n17">
 	<head>
 		<title>Tooltip Test Page</title>
-
-		<script type="text/javascript" src="../output/app.js"></script>
-
+		<script type="text/javascript" src="../dist/n17-tooltip.js"></script>
 		<link rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css" type="text/css" />
+
+		<script type="text/javascript">
+			angular.module('n17', ['n17-tooltip']);
+		</script>
 	</head>
 
 	<body>
