@@ -1,6 +1,6 @@
 {
   "name": "n17-tooltip",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Angular Directive to display a tooltip",
   "repository": {
     "type": "git",

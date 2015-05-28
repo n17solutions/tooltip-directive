@@ -25,11 +25,11 @@ gulp.task('cleanOutput', function() {
 });
 
 gulp.task('browserify', function() {
-	//return browserify(app.src.js + '/app.js')
 	return browserify({
 			entries: app.src.js + '/app.js',
 			standalone: 'n17tooltip'
 		})
+		.require('angular')
 		.bundle()
 		.pipe(source('app.js'))
 		.pipe(derequire())
