@@ -1,14 +1,15 @@
-require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var $ = require('jquery');
-var qtip = require('qtip2');
-var angular = require('angular');
-
-var app = angular.module('n17-tooltip', []);
+var angular 	= require('angular'),
+	app 		= angular.module('n17-tooltip', []);
 
 require('./directives');
-},{"./directives":4,"angular":"angular","jquery":"jquery","qtip2":3}],2:[function(require,module,exports){
+},{"./directives":5,"angular":2}],2:[function(require,module,exports){
+(function (global){
+
+; jQuery = global.jQuery = require("/Users/Wooderz/Development/Webs/N17 Solutions/Components/Angular Directives/Tooltip Directive/node_modules/jquery/dist/jquery.js");
+; var __browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /**
  * @license AngularJS v1.3.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -26318,7 +26319,16 @@ var minlengthDirective = function() {
 })(window, document);
 
 !window.angular.$$csp() && window.angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}</style>');
-},{}],3:[function(require,module,exports){
+; browserify_shim__define__module__export__(typeof angular != "undefined" ? angular : window.angular);
+
+}).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"/Users/Wooderz/Development/Webs/N17 Solutions/Components/Angular Directives/Tooltip Directive/node_modules/jquery/dist/jquery.js":4}],3:[function(require,module,exports){
+(function (global){
+
+; jQuery = global.jQuery = require("/Users/Wooderz/Development/Webs/N17 Solutions/Components/Angular Directives/Tooltip Directive/node_modules/jquery/dist/jquery.js");
+; var __browserify_shim_require__=require;(function browserifyShim(module, define, require) {
 /*
  * qTip2 - Pretty powerful tooltips - v2.2.1
  * http://qtip2.com
@@ -29771,116 +29781,12 @@ CHECKS.ie6 = {
 ;}));
 }( window, document ));
 
-},{}],4:[function(require,module,exports){
-'use strict';
+}).call(global, module, undefined, undefined);
 
-var app = angular.module('n17-tooltip');
-app.directive('n17TooltipSpeechbubble', require('./speechbubble'));
-},{"./speechbubble":5}],5:[function(require,module,exports){
-'use strict';
-
-module.exports = function() {
-	return {
-		restrict: 'E',
-		scope: {
-			visible: '='
-		},
-		link: function(scope, element, attrs) {
-			var my 				= attrs.tooltipMy || 'center left',
-				at 				= attrs.tooltipAt || 'right center',
-				tooltipClass 	= attrs.tooltipClass || 'tooltip',
-				content 		= attrs.tooltipContent || attrs.tooltip;
-
-			if (attrs.tooltipTitle) {
-				content = {
-					title: attrs.tooltipTitle,
-					text: content
-				};
-			}
-
-			$(element).qtip({
-				content: content,
-				position: {
-					my: my,
-					at: at,
-					target: element,
-					adjust: {
-						method: 'shift'
-					}
-				},
-				hide: {
-					fixed: true,
-					delay: 100
-				},
-				style: tooltipClass
-			});
-
-			if (attrs.tooltipVisible) {
-				scope.$watch('visible', function (newValue, oldValue) {
-					$(element).qtip('toggle', newValue);
-				});
-			}
-		}
-	};
-};
-
-
-
-
-
-
-/*'use strict';
-
-module.exports = function() {
-	return {
-		restrict: 'E',
-		scope: {
-			visible: '='
-		},
-		controller: function($scope) {
-			debugger;
-		},
-		link: function(scope, element, attrs) {
-			debugger;
-			var my 				= attrs.tooltipMy || 'bottom center',
-				at 				= attrs.tooltipAt || 'top center',
-				tooltipClass 	= attrs.tooltipClass || 'tooltip',
-				content 		= attrs.tooltipContent || attrs.tooltip;
-
-			if (attrs.tooltipTitle) {
-				content = {
-					title: attrs.tooltipTitle,
-					text: content
-				};
-			}
-
-			$(element).qtip({
-				content: content,
-				position: {
-					my: my,
-					at: at,
-					target: element
-				},
-				hide: {
-					fixed: true,
-					delay: 100
-				},
-				style: tooltipClass
-			});
-
-			if (attrs.tooltipVisible) {
-				scope.$watch('visible', function (newValue, oldValue) {
-					$(element).qtip('toggle', newValue);
-				});
-			}
-		}
-	};	
-};*/
-},{}],"angular":[function(require,module,exports){
-require('./angular');
-module.exports = angular;
-
-},{"./angular":2}],"jquery":[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"/Users/Wooderz/Development/Webs/N17 Solutions/Components/Angular Directives/Tooltip Directive/node_modules/jquery/dist/jquery.js":4}],4:[function(require,module,exports){
+(function (global){
+; var __browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -39092,4 +38998,64 @@ return jQuery;
 
 }));
 
-},{}]},{},[1]);
+; browserify_shim__define__module__export__(typeof jQuery != "undefined" ? jQuery : window.jQuery);
+
+}).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],5:[function(require,module,exports){
+'use strict';
+
+var app = require('angular').module('n17-tooltip');
+
+app.directive('n17TooltipSpeechbubble', require('./speechbubble'));
+},{"./speechbubble":6,"angular":2}],6:[function(require,module,exports){
+'use strict';
+
+require('qtip2');
+
+module.exports = function() {
+	return {
+		restrict: 'E',
+		scope: {
+			visible: '='
+		},
+		link: function(scope, element, attrs) {
+			var my 				= attrs.tooltipMy || 'center left',
+				at 				= attrs.tooltipAt || 'right center',
+				tooltipClass 	= attrs.tooltipClass || 'tooltip',
+				content 		= attrs.tooltipContent || attrs.tooltip;
+
+			if (attrs.tooltipTitle) {
+				content = {
+					title: attrs.tooltipTitle,
+					text: content
+				};
+			}
+
+			$(element).qtip({
+				content: content,
+				position: {
+					my: my,
+					at: at,
+					target: element,
+					adjust: {
+						method: 'shift'
+					}
+				},
+				hide: {
+					fixed: true,
+					delay: 100
+				},
+				style: tooltipClass
+			});
+
+			if (attrs.tooltipVisible) {
+				scope.$watch('visible', function (newValue, oldValue) {
+					$(element).qtip('toggle', newValue);
+				});
+			}
+		}
+	};
+};
+},{"qtip2":3}]},{},[1]);

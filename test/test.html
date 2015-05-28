@@ -1,32 +1,13 @@
-<html ng-app="n17">
+<html ng-app="n17-tooltip">
 	<head>
 		<title>Tooltip Test Page</title>
-		<script type="text/javascript" src="../dist/n17-tooltip.min.js"></script>
+
+		<script type="text/javascript" src="../output/app.js"></script>
 
 		<link rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css" type="text/css" />
-
-		<script type="text/javascript">
-			var n17Module = angular.module('n17', ['n17-tooltip']);
-		</script>
-
-		<style type="text/css">
-			.tooltip {
-				font-family: Verdana, Arial, sans-serif;
-			}
-
-			.tooltip .qtip-titlebar {
-				background-color: #2a2a2a;
-				color: #30bac7;
-			}
-
-			.tooltip .qtip-content {
-				background-color: #494949;
-				color: #a2c730;
-			}
-		</style>
 	</head>
 
 	<body>
-		<n17-tooltip-speechbubble tooltip="I AM TOOLTIP" tooltip-title="I AM TITLE">X</n17-tooltip-speechbubble>
+		<n17-tooltip-speechbubble tooltip="I AM TOOLTIP" tooltip-title="I AM TITLE">Speechbubble</n17-tooltip-speechbubble>
 	</body>
 </html>

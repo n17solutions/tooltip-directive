@@ -1,50 +1,53 @@
 var gulp 		= require('gulp'),
-	browserify 	= require('browserify')
-	source 		= require('vinyl-source-stream'),
 	del			= require('del'),
+	browserify 	= require('browserify'),
+	source 		= require('vinyl-source-stream'),
 	concat		= require('gulp-concat'),
-	ngAnnotate 	= require('browserify-ngannotate'),
 	uglify		= require('gulp-uglify'),
 	rename 		= require('gulp-rename'),
-	runSequence = require('run-sequence');
+	runSequence	= require('run-sequence');
+
+var app = {
+	src: {
+		js: './src/js'
+	},
+	output: './output',
+	dist: './dist'
+};
 
 gulp.task('clean', ['cleanOutput'], function() {
-	return del([
-		'./dist',
-		'./templates/*.js']);
+	return del(app.dist);
 });
 
 gulp.task('cleanOutput', function() {
-	return del(['./output']);
+	return(del(app.output));
 });
 
 gulp.task('browserify', function() {
-	return browserify('./js/app.js', {
-			// list of modules to make require-able externally
-			require: ['jquery', 'angular']
-		})
+	return browserify(app.src.js + '/app.js')
+		//.external('angular')
 		.bundle()
 		.pipe(source('app.js'))
-		.pipe(gulp.dest('./output'));
+		.pipe(gulp.dest(app.output));
 });
 
 gulp.task('package', function() {
-	return gulp.src(['./output/*.js'])
+	return gulp.src(app.output + '/*.js')
 		.pipe(concat('n17-tooltip.js'))
-		.pipe(gulp.dest('./dist'))
+		.pipe(gulp.dest(app.dist));
 });
 
 gulp.task('minify', function() {
-	return gulp.src('./dist/n17-tooltip.js')
+	return gulp.src(app.dist + '/n17-tooltip.js')
 		.pipe(uglify({
 			options: {
 				mangle: false
 			}
 		}))
 		.pipe(rename(function(path) {
-			path.extname = ".min.js"
+			path.extname = ".min.js";
 		}))
-		.pipe(gulp.dest('./dist'));
+		.pipe(gulp.dest(app.dist));
 });
 
 gulp.task('production', function(cb) {
