@@ -10,6 +10,9 @@ module.exports = {
 		library: "MyLibrary",
 		libraryTarget: "umd"
 	},
+	externals: {
+		angular: "angular"
+	},
 	plugins: [
 		new webpack.ProvidePlugin({
 			$: "jquery",
