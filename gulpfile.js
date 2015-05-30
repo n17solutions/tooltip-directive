@@ -1,12 +1,14 @@
-var gulp 		= require('gulp'),
+/*var gulp 		= require('gulp'),
 	del			= require('del'),
 	browserify 	= require('browserify'),
+	webpack 	= require('gulp-webpack-build'),
 	derequire 	= require('gulp-derequire'),
 	source 		= require('vinyl-source-stream'),
 	concat		= require('gulp-concat'),
 	uglify		= require('gulp-uglify'),
 	rename 		= require('gulp-rename'),
-	runSequence	= require('run-sequence');
+	runSequence	= require('run-sequence'),
+	path 		= require('path');
 
 var app = {
 	src: {
@@ -59,4 +61,38 @@ gulp.task('minify', function() {
 
 gulp.task('production', function(cb) {
 	runSequence('clean', 'browserify', 'package', 'minify', 'cleanOutput', cb);
+});*/
+
+'use strict';
+
+var path 			= require('path'),
+	gulp 			= require('gulp'),
+	webpack 		= require('gulp-webpack-build'),
+	src 			= './src',
+	dest 			= './dist',
+	webpackOptions 	= {
+		debug: true,
+		devtool: '#source-map',
+		watchDelay: 200
+	},
+	webpackConfig 	= {
+		useMemoryFs: true,
+		progress: true
+	},
+	CONFIG_FILENAME = './webpack.config.js';
+
+gulp.task('webpack', [], function() {
+	return gulp.src('./webpack.config.js')
+		.pipe(webpack.init(webpackConfig))
+		.pipe(webpack.props(webpackOptions))
+		.pipe(webpack.run())
+		.pipe(webpack.format({
+			version: false,
+			timings: true
+		}))
+		.pipe(webpack.failAfter({
+			errors: true,
+			warnings: true
+		}))
+		.pipe(gulp.dest(dest));
 });
