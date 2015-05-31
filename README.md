@@ -4,6 +4,18 @@
 
 Show a tooltip to give the user some information, can be shown or hidden either on a mouse event, or programmatically.
 
+### Installation
+
+**Bower**
+
+`bower install --save n17tooltip`
+
+**GutHub**
+
+https://github.com/n17solutions/tooltip-directive.git
+
+The usable files are housed in the **dist** folder
+
 ### Compatibility
 
 N17 Tooltip requires:
