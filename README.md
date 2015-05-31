@@ -10,7 +10,7 @@ Show a tooltip to give the user some information, can be shown or hidden either 
 
 `bower install --save n17tooltip`
 
-**GutHub**
+**GitHub**
 
 https://github.com/n17solutions/tooltip-directive.git
 
