@@ -106,7 +106,7 @@ gulp.task('build-development', [], function() {
 		.pipe(webpack.run())
 		.pipe(webpack.format(app.webpack.format))
 		.pipe(webpack.failAfter(app.webpack.failAfter))
-		.pipe(gulp.dest(app.dist));
+		.pipe(gulp.dest(app.dist.withFrameworks));
 });
 
 gulp.task('copy-css', [], function() {
