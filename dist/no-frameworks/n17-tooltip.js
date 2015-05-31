@@ -57,7 +57,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var angular = __webpack_require__(1);
-	debugger;
 	var app = angular.module('n17-tooltip', []);
 
 	__webpack_require__(2);
