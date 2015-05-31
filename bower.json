@@ -1,11 +1,11 @@
 {
   "name": "n17-tooltip",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://github.com/wooderz/tooltip-directive",
   "authors": [
     "James Woodley <info@n17solutions.com>"
   ],
-  "main": "./dist/n17-tooltip.min.js",
+  "main": "./dist/no-frameworks/n17-tooltip.min.js",
   "description": "Angular Directive to display a tooltip",
   "keywords": [
     "n17",
