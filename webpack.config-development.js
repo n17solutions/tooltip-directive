@@ -10,11 +10,6 @@ module.exports = {
 		library: "n17tooltip",
 		libraryTarget: "umd"
 	},
-	externals: {
-		angular: "angular",
-		jquery: "jquery",
-		qtip2: "qtip2"
-	},
 	plugins: [
 		new webpack.ProvidePlugin({
 			$: "jquery",
