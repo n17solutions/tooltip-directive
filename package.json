@@ -1,6 +1,6 @@
 {
   "name": "n17-tooltip",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Angular Directive to display a tooltip",
   "repository": {
     "type": "git",
@@ -20,10 +20,12 @@
   },
   "homepage": "https://github.com/wooderz/tooltip-directive",
   "devDependencies": {
+    "del": "^1.2.0",
     "gulp": "^3.8.11",
     "gulp-webpack-build": "^0.11.1",
     "ng-annotate-webpack-plugin": "^0.1.2",
     "node-libs-browser": "^0.5.2",
+    "run-sequence": "^1.1.0",
     "webpack": "^1.9.10",
     "webpack-config": "^0.7.0"
   },

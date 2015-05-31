@@ -6,12 +6,14 @@ var webpack 			= require('webpack'),
 module.exports = {
 	entry: './src/js/app.js',
 	output: {
-		filename: "webpack.js",
-		library: "MyLibrary",
+		filename: "n17-tooltip.min.js",
+		library: "n17tooltip",
 		libraryTarget: "umd"
 	},
 	externals: {
-		angular: "angular"
+		angular: "angular",
+		jquery: "jquery",
+		qtip2: "qtip2"
 	},
 	plugins: [
 		new webpack.ProvidePlugin({
