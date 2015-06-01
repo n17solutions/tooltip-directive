@@ -11,7 +11,6 @@ var _ 			= require('lodash'),
 			js: './src/js',
 			css: './src/css'
 		},
-		//dist: './dist',
 		dist: {
 			root: './dist',
 			withoutFrameworks: './dist/no-frameworks',
