@@ -98,12 +98,12 @@ return /******/ (function(modules) { // webpackBootstrap
 					at 				= attrs.tooltipAt || 'right center',
 					tooltipClass 	= attrs.tooltipClass || 'tooltip',
 					content 		= attrs.tooltipContent || attrs.tooltip,
-					closeButton 	= attrs.tooltipCloseButton || false,
-					allowShow 		= attrs.tooltipAllowShow || true,
-					allowHide 		= attrs.tooltipAllowHide || true,
-					showEffect 		= attrs.tooltipShowEffect || false,
-					hideEffect 		= attrs.tooltipHideEffect || false,
-					hideDelay 		= attrs.tooltipHideDelay || false;
+					closeButton 	= scope.$eval(attrs.tooltipCloseButton) || false,
+					allowShow 		= scope.$eval(attrs.tooltipAllowShow) !== false,
+					allowHide 		= scope.$eval(attrs.tooltipAllowHide) !== false,
+					showEffect 		= scope.$eval(attrs.tooltipShowEffect) || false,
+					hideEffect 		= scope.$eval(attrs.tooltipHideEffect) || false,
+					hideDelay 		= scope.$eval(attrs.tooltipHideDelay) || false;
 
 				content = {
 					text: content
@@ -202,8 +202,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 
 				$(element).qtip(qTipOptions);
-
-				if (attrs.tooltipVisible) {
+				
+				if (attrs.tooltipVisible === "true") {
 					scope.$watch('visible', function (newValue, oldValue) {
 						$(element).qtip('toggle', newValue);
 					});
