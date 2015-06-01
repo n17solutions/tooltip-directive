@@ -99,6 +99,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					tooltipClass 	= attrs.tooltipClass || 'tooltip',
 					content 		= attrs.tooltipContent || attrs.tooltip,
 					closeButton 	= attrs.tooltipCloseButton || false,
+					allowShow 		= attrs.tooltipAllowShow || true,
 					allowHide 		= attrs.tooltipAllowHide || true,
 					showEffect 		= attrs.tooltipShowEffect || false,
 					hideEffect 		= attrs.tooltipHideEffect || false,
@@ -144,6 +145,14 @@ return /******/ (function(modules) { // webpackBootstrap
 										break;
 								}
 							}
+						}
+					});
+				}
+
+				if (!allowShow) {
+					_.extend(qTipOptions, {
+						show: {
+							event: false
 						}
 					});
 				}

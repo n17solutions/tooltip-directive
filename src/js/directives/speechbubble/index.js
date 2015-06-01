@@ -16,6 +16,7 @@ module.exports = function() {
 				tooltipClass 	= attrs.tooltipClass || 'tooltip',
 				content 		= attrs.tooltipContent || attrs.tooltip,
 				closeButton 	= attrs.tooltipCloseButton || false,
+				allowShow 		= attrs.tooltipAllowShow || true,
 				allowHide 		= attrs.tooltipAllowHide || true,
 				showEffect 		= attrs.tooltipShowEffect || false,
 				hideEffect 		= attrs.tooltipHideEffect || false,
@@ -61,6 +62,14 @@ module.exports = function() {
 									break;
 							}
 						}
+					}
+				});
+			}
+
+			if (!allowShow) {
+				_.extend(qTipOptions, {
+					show: {
+						event: false
 					}
 				});
 			}
