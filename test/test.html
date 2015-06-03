@@ -8,14 +8,17 @@
 			angular.module('n17', ['n17-tooltip']);
 
 			angular.module('n17').controller('testcontroller', function($scope) {
-				this.tooltipVisible = true;
+				this.tooltipVisible = false;
 			});
 		</script>
 	</head>
 
 	<body style="margin-top: 50px;">
 		<div ng-controller="testcontroller as ctrl">
-			<n17-tooltip-speechbubble tooltip="Tooltip Content" tooltip-title="Tooltip Title" tooltip-visible="true" visible="ctrl.tooltipVisible"  tooltip-hide-effect="slide" tooltip-show-effect="slide" tooltip-close-button="true">Speechbubble</n17-tooltip-speechbubble>
+			<n17-tooltip-speechbubble tooltip="Tooltip Content" tooltip-title="Tooltip Title" tooltip-visible="true" visible="ctrl.tooltipVisible"  tooltip-hide-effect="slide" tooltip-show-effect="slide" tooltip-allow-show="false">Speechbubble</n17-tooltip-speechbubble>
+			<p>
+				<button ng-click="ctrl.tooltipVisible = true">TRUE</button>
+			</p>
 		</div>
 	</body>
 </html>
