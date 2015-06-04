@@ -2,7 +2,7 @@
 
 require('qtip2');
 
-var _ = require('lodash');
+var extend = require('lodash/object/extend');
 
 module.exports = function() {
 	return {
@@ -20,20 +20,22 @@ module.exports = function() {
 				allowHide 		= scope.$eval(attrs.tooltipAllowHide) !== false,
 				showEffect 		= scope.$eval(attrs.tooltipShowEffect) || false,
 				hideEffect 		= scope.$eval(attrs.tooltipHideEffect) || false,
-				hideDelay 		= scope.$eval(attrs.tooltipHideDelay) || false;
+				hideDelay 		= scope.$eval(attrs.tooltipHideDelay) || false,
+				adjustX			= parseInt(attrs.tooltipAdjustX) || 0,
+				adjustY			= parseInt(attrs.tooltipAdjustY) || 0;
 
 			content = {
 				text: content
 			};
 
 			if (attrs.tooltipTitle) {
-				_.extend(content, {
+				extend(content, {
 					title: attrs.tooltipTitle
 				});
 			}
 
 			if (closeButton) {
-				_.extend(content, {
+				extend(content, {
 					button: true
 				});
 			}
@@ -52,8 +54,32 @@ module.exports = function() {
 				style: tooltipClass
 			};
 
+			if (adjustX > 0) {
+				if (qTipOptions.position.adjust) {
+					qTipOptions.position.adjust.x = adjustX;
+				} else {
+					extend(qTipOptions.position, {
+						adjust: {
+							x: adjustX
+						}
+					});
+				}
+			}
+
+			if (adjustY > 0) {
+				if (qTipOptions.position.adjust) {
+					qTipOptions.position.adjust.y = adjustY;
+				} else {
+					extend(qTipOptions.position, {
+						adjust: {
+							y: adjustY
+						}
+					});
+				}
+			}
+
 			if (!!showEffect) {
-				_.extend(qTipOptions, {
+				extend(qTipOptions, {
 					show: {
 						effect: function() {
 							switch (showEffect.toLowerCase()) {
@@ -67,7 +93,7 @@ module.exports = function() {
 			}
 
 			if (!allowShow) {
-				_.extend(qTipOptions, {
+				extend(qTipOptions, {
 					show: {
 						event: false
 					}
@@ -75,7 +101,7 @@ module.exports = function() {
 			}
 
 			if (!!hideEffect) {
-				_.extend(qTipOptions, {
+				extend(qTipOptions, {
 					hide: {
 						effect: function() {
 							switch (hideEffect.toLowerCase()) {
@@ -90,12 +116,12 @@ module.exports = function() {
 
 			if (!!hideDelay) {
 				if (!!qTipOptions.hide) {
-					_.extend(qTipOptions.hide, {
+					extend(qTipOptions.hide, {
 						fixed: true,
 						delay: 100
 					});
 				} else {
-					_.extend(qTipOptions, {
+					extend(qTipOptions, {
 						hide: {
 							fixed: true,
 							delay: 100
@@ -106,11 +132,11 @@ module.exports = function() {
 
 			if (!allowHide || closeButton) {
 				if (!!qTipOptions.hide) {
-					_.extend(qTipOptions.hide, {
+					extend(qTipOptions.hide, {
 						event: false
 					});
 				} else {
-					_.extend(qTipOptions, {
+					extend(qTipOptions, {
 						hide: {
 							event: false
 						}
