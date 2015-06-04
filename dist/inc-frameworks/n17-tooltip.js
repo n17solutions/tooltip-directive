@@ -26521,7 +26521,14 @@ return /******/ (function(modules) { // webpackBootstrap
 				
 				if (attrs.tooltipVisible === "true") {
 					scope.$watch('visible', function (newValue, oldValue) {
+						debugger;
 						$(element).qtip('toggle', newValue);
+
+						if (newValue) {
+							debugger;
+							var api = $('n17-tooltip-speechbubble').qtip('api');
+							api.reposition(null, false);
+						}
 					});
 				}
 			}
@@ -51464,3 +51471,4 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
+//# sourceMappingURL=n17-tooltip.js.map

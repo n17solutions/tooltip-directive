@@ -1,10 +1,13 @@
 {
   "name": "n17-tooltip",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Angular Directive to display a tooltip",
   "repository": {
     "type": "git",
     "url": "https://github.com/wooderz/tooltip-directive.git"
+  },
+  "scripts": {
+    "postinstall": "bower install"
   },
   "keywords": [
     "n17",

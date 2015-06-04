@@ -11,13 +11,24 @@
 				this.tooltipVisible = false;
 			});
 		</script>
+
+		<style type="text/css">
+		.tooltip {
+			border:none;
+		}
+		.qtip-content { 
+			background-color: white;
+			border: 1px solid #808080;
+		}
+		</style>
 	</head>
 
 	<body style="margin-top: 50px;">
 		<div ng-controller="testcontroller as ctrl">
-			<n17-tooltip-speechbubble tooltip="Tooltip Content" tooltip-title="Tooltip Title" tooltip-visible="true" visible="ctrl.tooltipVisible"  tooltip-hide-effect="slide" tooltip-show-effect="slide" tooltip-allow-show="false">Speechbubble</n17-tooltip-speechbubble>
+			<n17-tooltip-speechbubble tooltip="Tooltip Content" visible="ctrl.tooltipVisible" tooltip-visible="true" tooltip-hide-effect="slide" tooltip-show-effect="slide">Speechbubble</n17-tooltip-speechbubble>
 			<p>
-				<button ng-click="ctrl.tooltipVisible = true">TRUE</button>
+			<button ng-click="ctrl.tooltipVisible = true;">TRUE</button>
+			<button ng-click="ctrl.tooltipVisible = false;">FALSE</button>
 			</p>
 		</div>
 	</body>
