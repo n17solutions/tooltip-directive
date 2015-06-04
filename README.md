@@ -79,6 +79,8 @@ This will show a close button within the tooltip to enable the dismissal of the 
 * tooltip-show-effect:	Enum; one of the effect values (see below)
 * tooltip-hide-effect:	Enum; one of the effect values (see below)
 * tooltip-hide-delay:	Boolean; Whether to have a delay before the tooltip hides
+* tooltip-adjust-x:		Int; adjusts the position of the tooltip along the x axis by the amount of pixels specified
+* tooltip-adjust-y:		Int; adjusts the position of the tooltip along the y axis by the amount of pixels specified
 
 ### Effects
 N17 Tooltip supports animations and effects when showing and hiding the tooltip, the supported effects are:
