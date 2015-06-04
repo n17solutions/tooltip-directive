@@ -206,6 +206,11 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (attrs.tooltipVisible === "true") {
 					scope.$watch('visible', function (newValue, oldValue) {
 						$(element).qtip('toggle', newValue);
+
+						if (newValue) {
+							var api = $('n17-tooltip-speechbubble').qtip('api');
+							api.reposition(null, false);
+						}
 					});
 				}
 			}
