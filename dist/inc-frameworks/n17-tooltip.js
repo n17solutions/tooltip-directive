@@ -26523,8 +26523,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		return {
 			restrict: 'E',
 			scope: {
-				visible: 	'=',
-				target:		'='
+				visible:	 	'=',
+				expression:	'='
 			},
 			link: function(scope, element, attrs) {
 				var my 					= attrs.tooltipMy || 'center left',
@@ -26662,8 +26662,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				$(element).qtip(qTipOptions);
 
-				if (scope.target) {
-					scope.$watch('target', function (newValue, oldValue) {
+				if (scope.expression) {
+					scope.$watch('expression', function (newValue, oldValue) {
 						if (!equals(newValue, oldValue)) {
 							$(element).qtip('content', newValue);
 						}
