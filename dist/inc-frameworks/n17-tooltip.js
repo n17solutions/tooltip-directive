@@ -26664,7 +26664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				scope.$watch('expression', function (newValue, oldValue) {
 					if (!equals(newValue, oldValue)) {
-						$(element).qtip('content', newValue);
+						$(element).qtip('options', 'content.text', newValue);
 					}
 				});
 
