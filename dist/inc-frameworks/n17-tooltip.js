@@ -74,7 +74,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;/**
-	 * @license AngularJS v1.3.15
+	 * @license AngularJS v1.3.16
 	 * (c) 2010-2014 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -129,7 +129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return match;
 	    });
 
-	    message = message + '\nhttp://errors.angularjs.org/1.3.15/' +
+	    message = message + '\nhttp://errors.angularjs.org/1.3.16/' +
 	      (module ? module + '/' : '') + code;
 	    for (i = 2; i < arguments.length; i++) {
 	      message = message + (i == 2 ? '?' : '&') + 'p' + (i - 2) + '=' +
@@ -224,6 +224,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  createMap: true,
 
 	  NODE_TYPE_ELEMENT: true,
+	  NODE_TYPE_ATTRIBUTE: true,
 	  NODE_TYPE_TEXT: true,
 	  NODE_TYPE_COMMENT: true,
 	  NODE_TYPE_DOCUMENT: true,
@@ -335,7 +336,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return false;
 	  }
 
-	  var length = obj.length;
+	  // Support: iOS 8.2 (not reproducible in simulator)
+	  // "length" in obj used to prevent JIT error (gh-11508)
+	  var length = "length" in Object(obj) && obj.length;
 
 	  if (obj.nodeType === NODE_TYPE_ELEMENT && length) {
 	    return true;
@@ -1117,8 +1120,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * stripped since angular uses this notation internally.
 	 *
 	 * @param {Object|Array|Date|string|number} obj Input to be serialized into JSON.
-	 * @param {boolean|number=} pretty If set to true, the JSON output will contain newlines and whitespace.
-	 *    If set to an integer, the JSON output will contain that many spaces per indentation (the default is 2).
+	 * @param {boolean|number} [pretty=2] If set to true, the JSON output will contain newlines and whitespace.
+	 *    If set to an integer, the JSON output will contain that many spaces per indentation.
 	 * @returns {string|undefined} JSON-ified string representing `obj`.
 	 */
 	function toJson(obj, pretty) {
@@ -1750,6 +1753,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	var NODE_TYPE_ELEMENT = 1;
+	var NODE_TYPE_ATTRIBUTE = 2;
 	var NODE_TYPE_TEXT = 3;
 	var NODE_TYPE_COMMENT = 8;
 	var NODE_TYPE_DOCUMENT = 9;
@@ -1986,10 +1990,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	           * @ngdoc method
 	           * @name angular.Module#filter
 	           * @module ng
-	           * @param {string} name Filter name.
+	           * @param {string} name Filter name - this must be a valid angular expression identifier
 	           * @param {Function} filterFactory Factory function for creating new instance of filter.
 	           * @description
 	           * See {@link ng.$filterProvider#register $filterProvider.register()}.
+	           *
+	           * <div class="alert alert-warning">
+	           * **Note:** Filter names must be valid angular {@link expression} identifiers, such as `uppercase` or `orderBy`.
+	           * Names with special characters, such as hyphens and dots, are not allowed. If you wish to namespace
+	           * your filters, then you can use capitalization (`myappSubsectionFilterx`) or underscores
+	           * (`myapp_subsection_filterx`).
+	           * </div>
 	           */
 	          filter: invokeLater('$filterProvider', 'register'),
 
@@ -2203,11 +2214,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
 	 */
 	var version = {
-	  full: '1.3.15',    // all of these placeholder strings will be replaced by grunt's
+	  full: '1.3.16',    // all of these placeholder strings will be replaced by grunt's
 	  major: 1,    // package task
 	  minor: 3,
-	  dot: 15,
-	  codeName: 'locality-filtration'
+	  dot: 16,
+	  codeName: 'cookie-oatmealification'
 	};
 
 
@@ -2383,7 +2394,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Angular to manipulate the DOM in a cross-browser compatible way. **jqLite** implements only the most
 	 * commonly needed functionality with the goal of having a very small footprint.</div>
 	 *
-	 * To use jQuery, simply load it before `DOMContentLoaded` event fired.
+	 * To use `jQuery`, simply ensure it is loaded before the `angular.js` file.
 	 *
 	 * <div class="alert">**Note:** all element references in Angular are always wrapped with jQuery or
 	 * jqLite; they are never raw DOM references.</div>
@@ -2399,7 +2410,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * - [`children()`](http://api.jquery.com/children/) - Does not support selectors
 	 * - [`clone()`](http://api.jquery.com/clone/)
 	 * - [`contents()`](http://api.jquery.com/contents/)
-	 * - [`css()`](http://api.jquery.com/css/) - Only retrieves inline-styles, does not call `getComputedStyle()`
+	 * - [`css()`](http://api.jquery.com/css/) - Only retrieves inline-styles, does not call `getComputedStyle()`. As a setter, does not convert numbers to strings or append 'px'.
 	 * - [`data()`](http://api.jquery.com/data/)
 	 * - [`detach()`](http://api.jquery.com/detach/)
 	 * - [`empty()`](http://api.jquery.com/empty/)
@@ -2942,6 +2953,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  attr: function(element, name, value) {
+	    var nodeType = element.nodeType;
+	    if (nodeType === NODE_TYPE_TEXT || nodeType === NODE_TYPE_ATTRIBUTE || nodeType === NODE_TYPE_COMMENT) {
+	      return;
+	    }
 	    var lowercasedName = lowercase(name);
 	    if (BOOLEAN_ATTR[lowercasedName]) {
 	      if (isDefined(value)) {
@@ -3632,7 +3647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Return an instance of the service.
 	 *
 	 * @param {string} name The name of the instance to retrieve.
-	 * @param {string} caller An optional string to provide the origin of the function call for error messages.
+	 * @param {string=} caller An optional string to provide the origin of the function call for error messages.
 	 * @return {*} The instance.
 	 */
 
@@ -3643,8 +3658,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @description
 	 * Invoke the method and supply the method arguments from the `$injector`.
 	 *
-	 * @param {!Function} fn The function to invoke. Function parameters are injected according to the
-	 *   {@link guide/di $inject Annotation} rules.
+	 * @param {Function|Array.<string|Function>} fn The injectable function to invoke. Function parameters are
+	 *   injected according to the {@link guide/di $inject Annotation} rules.
 	 * @param {Object=} self The `this` for the invoked method.
 	 * @param {Object=} locals Optional object. If preset then any argument names are read from this
 	 *                         object first, before the `$injector` is consulted.
@@ -3911,8 +3926,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * configure your service in a provider.
 	 *
 	 * @param {string} name The name of the instance.
-	 * @param {function()} $getFn The $getFn for the instance creation. Internally this is a short hand
-	 *                            for `$provide.provider(name, {$get: $getFn})`.
+	 * @param {Function|Array.<string|Function>} $getFn The injectable $getFn for the instance creation.
+	 *                      Internally this is a short hand for `$provide.provider(name, {$get: $getFn})`.
 	 * @returns {Object} registered provider instance
 	 *
 	 * @example
@@ -3947,7 +3962,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * as a type/class.
 	 *
 	 * @param {string} name The name of the instance.
-	 * @param {Function} constructor A class (constructor function) that will be instantiated.
+	 * @param {Function|Array.<string|Function>} constructor An injectable class (constructor function)
+	 *     that will be instantiated.
 	 * @returns {Object} registered provider instance
 	 *
 	 * @example
@@ -4046,7 +4062,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * object which replaces or wraps and delegates to the original service.
 	 *
 	 * @param {string} name The name of the service to decorate.
-	 * @param {function()} decorator This function will be invoked when the service needs to be
+	 * @param {Function|Array.<string|Function>} decorator This function will be invoked when the service needs to be
 	 *    instantiated and should return the decorated service instance. The function is called using
 	 *    the {@link auto.$injector#invoke injector.invoke} method and is therefore fully injectable.
 	 *    Local injection arguments:
@@ -5895,7 +5911,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *       templateNamespace: 'html',
 	 *       scope: false,
 	 *       controller: function($scope, $element, $attrs, $transclude, otherInjectables) { ... },
-	 *       controllerAs: 'stringAlias',
+	 *       controllerAs: 'stringIdentifier',
+	 *       bindToController: false,
 	 *       require: 'siblingDirectiveName', // or // ['^parentDirectiveName', '?optionalDirectiveName', '?^optionalParent'],
 	 *       compile: function compile(tElement, tAttrs, transclude) {
 	 *         return {
@@ -6214,9 +6231,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *   * `iAttrs` - instance attributes - Normalized list of attributes declared on this element shared
 	 *     between all directive linking functions.
 	 *
-	 *   * `controller` - a controller instance - A controller instance if at least one directive on the
-	 *     element defines a controller. The controller is shared among all the directives, which allows
-	 *     the directives to use the controllers as a communication channel.
+	 *   * `controller` - the directive's required controller instance(s) - Instances are shared
+	 *     among all directives, which allows the directives to use the controllers as a communication
+	 *     channel. The exact value depends on the directive's `require` property:
+	 *       * `string`: the controller instance
+	 *       * `array`: array of controller instances
+	 *       * no controller(s) required: `undefined`
+	 *
+	 *     If a required controller cannot be found, and it is optional, the instance is `null`,
+	 *     otherwise the {@link error:$compile:ctreq Missing Required Controller} error is thrown.
 	 *
 	 *   * `transcludeFn` - A transclude linking function pre-bound to the correct transclusion scope.
 	 *     This is the same as the `$transclude`
@@ -6570,6 +6593,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return bindings;
 	  }
 
+	  function assertValidDirectiveName(name) {
+	    var letter = name.charAt(0);
+	    if (!letter || letter !== lowercase(letter)) {
+	      throw $compileMinErr('baddir', "Directive name '{0}' is invalid. The first character must be a lowercase letter", name);
+	    }
+	    return name;
+	  }
+
 	  /**
 	   * @ngdoc method
 	   * @name $compileProvider#directive
@@ -6588,6 +6619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   this.directive = function registerDirective(name, directiveFactory) {
 	    assertNotHasOwnProperty(name, 'directive');
 	    if (isString(name)) {
+	      assertValidDirectiveName(name);
 	      assertArg(directiveFactory, 'directiveFactory');
 	      if (!hasDirectives.hasOwnProperty(name)) {
 	        hasDirectives[name] = [];
@@ -9044,7 +9076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *  headers: {
 	     *    'Content-Type': undefined
 	     *  },
-	     *  data: { test: 'test' },
+	     *  data: { test: 'test' }
 	     * }
 	     *
 	     * $http(req).success(function(){...}).error(function(){...});
@@ -9479,6 +9511,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      promise.success = function(fn) {
+	        assertArgFn(fn, 'fn');
+
 	        promise.then(function(response) {
 	          fn(response.data, response.status, response.headers, config);
 	        });
@@ -9486,6 +9520,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      promise.error = function(fn) {
+	        assertArgFn(fn, 'fn');
+
 	        promise.then(null, function(response) {
 	          fn(response.data, response.status, response.headers, config);
 	        });
@@ -9966,7 +10002,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  function jsonpReq(url, callbackId, done) {
-	    // we can't use jQuery/jqLite here because jQuery does crazy shit with script elements, e.g.:
+	    // we can't use jQuery/jqLite here because jQuery does crazy stuff with script elements, e.g.:
 	    // - fetches local scripts via XHR and evals them
 	    // - adds and immediately removes script elements from the document
 	    var script = rawDocument.createElement('script'), callback = null;
@@ -11027,11 +11063,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	   *
 	   * Return host of current url.
 	   *
+	   * Note: compared to the non-angular version `location.host` which returns `hostname:port`, this returns the `hostname` portion only.
+	   *
 	   *
 	   * ```js
 	   * // given url http://example.com/#/some/path?foo=bar&baz=xoxo
 	   * var host = $location.host();
 	   * // => "example.com"
+	   *
+	   * // given url http://user:password@example.com:8080/#/some/path?foo=bar&baz=xoxo
+	   * host = $location.host();
+	   * // => "example.com"
+	   * host = location.host;
+	   * // => "example.com:8080"
 	   * ```
 	   *
 	   * @return {string} host of current url.
@@ -13586,7 +13630,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                               $window.webkitCancelRequestAnimationFrame;
 
 	    var rafSupported = !!requestAnimationFrame;
-	    var raf = rafSupported
+	    var rafFn = rafSupported
 	      ? function(fn) {
 	          var id = requestAnimationFrame(fn);
 	          return function() {
@@ -13600,9 +13644,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	          };
 	        };
 
-	    raf.supported = rafSupported;
+	    queueFn.supported = rafSupported;
 
-	    return raf;
+	    var cancelLastRAF;
+	    var taskCount = 0;
+	    var taskQueue = [];
+	    return queueFn;
+
+	    function flush() {
+	      for (var i = 0; i < taskQueue.length; i++) {
+	        var task = taskQueue[i];
+	        if (task) {
+	          taskQueue[i] = null;
+	          task();
+	        }
+	      }
+	      taskCount = taskQueue.length = 0;
+	    }
+
+	    function queueFn(asyncFn) {
+	      var index = taskQueue.length;
+
+	      taskCount++;
+	      taskQueue.push(asyncFn);
+
+	      if (index === 0) {
+	        cancelLastRAF = rafFn(flush);
+	      }
+
+	      return function cancelQueueFn() {
+	        if (index >= 0) {
+	          taskQueue[index] = null;
+	          index = null;
+
+	          if (--taskCount === 0 && cancelLastRAF) {
+	            cancelLastRAF();
+	            cancelLastRAF = null;
+	            taskQueue.length = 0;
+	          }
+	        }
+	      };
+	    }
 	  }];
 	}
 
@@ -13692,7 +13774,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          this.$$childHead = this.$$childTail = null;
 	      this.$$listeners = {};
 	      this.$$listenerCount = {};
-	      this.$$watchersCount = 0;
 	      this.$id = nextUid();
 	      this.$$ChildScope = null;
 	    }
@@ -16583,6 +16664,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Dependency Injected. To achieve this a filter definition consists of a factory function which is
 	 * annotated with dependencies and is responsible for creating a filter function.
 	 *
+	 * <div class="alert alert-warning">
+	 * **Note:** Filter names must be valid angular {@link expression} identifiers, such as `uppercase` or `orderBy`.
+	 * Names with special characters, such as hyphens and dots, are not allowed. If you wish to namespace
+	 * your filters, then you can use capitalization (`myappSubsectionFilterx`) or underscores
+	 * (`myapp_subsection_filterx`).
+	 * </div>
+	 *
 	 * ```js
 	 *   // Filter registration
 	 *   function MyModule($provide, $filterProvider) {
@@ -16664,6 +16752,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @name $filterProvider#register
 	   * @param {string|Object} name Name of the filter function, or an object map of filters where
 	   *    the keys are the filter names and the values are the filter factories.
+	   *
+	   *    <div class="alert alert-warning">
+	   *    **Note:** Filter names must be valid angular {@link expression} identifiers, such as `uppercase` or `orderBy`.
+	   *    Names with special characters, such as hyphens and dots, are not allowed. If you wish to namespace
+	   *    your filters, then you can use capitalization (`myappSubsectionFilterx`) or underscores
+	   *    (`myapp_subsection_filterx`).
+	   *    </div>
 	   * @returns {Object} Registered filter instance, or if a map of filters was provided then a map
 	   *    of the registered filter instances.
 	   */
@@ -16837,14 +16932,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return function(array, expression, comparator) {
 	    if (!isArray(array)) return array;
 
+	    var expressionType = (expression !== null) ? typeof expression : 'null';
 	    var predicateFn;
 	    var matchAgainstAnyProp;
 
-	    switch (typeof expression) {
+	    switch (expressionType) {
 	      case 'function':
 	        predicateFn = expression;
 	        break;
 	      case 'boolean':
+	      case 'null':
 	      case 'number':
 	      case 'string':
 	        matchAgainstAnyProp = true;
@@ -16870,6 +16967,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    comparator = equals;
 	  } else if (!isFunction(comparator)) {
 	    comparator = function(actual, expected) {
+	      if (isUndefined(actual)) {
+	        // No substring matching against `undefined`
+	        return false;
+	      }
+	      if ((actual === null) || (expected === null)) {
+	        // No substring matching against `null`; only match against `null`
+	        return actual === expected;
+	      }
 	      if (isObject(actual) || isObject(expected)) {
 	        // Prevent an object to be considered equal to a string like `'[object'`
 	        return false;
@@ -17020,6 +17125,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @description
 	 * Formats a number as text.
 	 *
+	 * If the input is null or undefined, it will just be returned.
+	 * If the input is infinite (Infinity/-Infinity) the Infinity symbol '∞' is returned.
 	 * If the input is not a number an empty string is returned.
 	 *
 	 * @param {number|string} number Number to format.
@@ -17628,7 +17735,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *    Can be one of:
 	 *
 	 *    - `function`: Getter function. The result of this function will be sorted using the
-	 *      `<`, `=`, `>` operator.
+	 *      `<`, `===`, `>` operator.
 	 *    - `string`: An Angular expression. The result of this expression is used to compare elements
 	 *      (for example `name` to sort by a property called `name` or `name.substr(0, 3)` to sort by
 	 *      3 first characters of a property called `name`). The result of a constant expression
@@ -18739,11 +18846,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	       <form name="myForm" ng-controller="FormController" class="my-form">
 	         userType: <input name="input" ng-model="userType" required>
 	         <span class="error" ng-show="myForm.input.$error.required">Required!</span><br>
-	         <tt>userType = {{userType}}</tt><br>
-	         <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br>
-	         <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br>
-	         <tt>myForm.$valid = {{myForm.$valid}}</tt><br>
-	         <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br>
+	         <code>userType = {{userType}}</code><br>
+	         <code>myForm.input.$valid = {{myForm.input.$valid}}</code><br>
+	         <code>myForm.input.$error = {{myForm.input.$error}}</code><br>
+	         <code>myForm.$valid = {{myForm.$valid}}</code><br>
+	         <code>myForm.$error.required = {{!!myForm.$error.required}}</code><br>
 	        </form>
 	      </file>
 	      <file name="protractor.js" type="protractor">
@@ -19431,7 +19538,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Text input with number validation and transformation. Sets the `number` validation
 	   * error if not a valid number.
 	   *
-	   * The model must always be a number, otherwise Angular will throw an error.
+	   * <div class="alert alert-warning">
+	   * The model must always be of type `number` otherwise Angular will throw an error.
+	   * Be aware that a string containing a number is not enough. See the {@link ngModel:numfmt}
+	   * error docs for more information and an example of how to convert your model if necessary.
+	   * </div>
 	   *
 	   * @param {string} ngModel Assignable angular expression to data-bind to.
 	   * @param {string=} name Property name of the form under which the control is published.
@@ -21139,17 +21250,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * document; alternatively, the css rule above must be included in the external stylesheet of the
 	 * application.
 	 *
-	 * Legacy browsers, like IE7, do not provide attribute selector support (added in CSS 2.1) so they
-	 * cannot match the `[ng\:cloak]` selector. To work around this limitation, you must add the css
-	 * class `ng-cloak` in addition to the `ngCloak` directive as shown in the example below.
-	 *
 	 * @element ANY
 	 *
 	 * @example
 	   <example>
 	     <file name="index.html">
 	        <div id="template1" ng-cloak>{{ 'hello' }}</div>
-	        <div id="template2" ng-cloak class="ng-cloak">{{ 'hello IE7' }}</div>
+	        <div id="template2" class="ng-cloak">{{ 'world' }}</div>
 	     </file>
 	     <file name="protractor.js" type="protractor">
 	       it('should remove the template directive and css class', function() {
@@ -23174,7 +23281,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * If the validity changes to invalid, the model will be set to `undefined`,
 	   * unless {@link ngModelOptions `ngModelOptions.allowInvalid`} is `true`.
 	   * If the validity changes to valid, it will set the model to the last available valid
-	   * modelValue, i.e. either the last parsed value or the last value set from the scope.
+	   * `$modelValue`, i.e. either the last parsed value or the last value set from the scope.
 	   */
 	  this.$validate = function() {
 	    // ignore $validate before model is initialized
@@ -23482,7 +23589,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // if scope model value and ngModel value are out of sync
 	    // TODO(perf): why not move this to the action fn?
-	    if (modelValue !== ctrl.$modelValue) {
+	    if (modelValue !== ctrl.$modelValue &&
+	       // checks for NaN is needed to allow setting the model to NaN when there's an asyncValidator
+	       (ctrl.$modelValue === ctrl.$modelValue || modelValue === modelValue)
+	    ) {
 	      ctrl.$modelValue = ctrl.$$rawModelValue = modelValue;
 	      parserValid = undefined;
 
@@ -23659,10 +23769,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	           var _name = 'Brian';
 	           $scope.user = {
 	             name: function(newName) {
-	               if (angular.isDefined(newName)) {
-	                 _name = newName;
-	               }
-	               return _name;
+	              // Note that newName can be undefined for two reasons:
+	              // 1. Because it is called as a getter and thus called with no arguments
+	              // 2. Because the property should actually be set to undefined. This happens e.g. if the
+	              //    input is invalid
+	              return arguments.length ? (_name = newName) : _name;
 	             }
 	           };
 	         }]);
@@ -23870,7 +23981,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var _name = 'Brian';
 	          $scope.user = {
 	            name: function(newName) {
-	              return angular.isDefined(newName) ? (_name = newName) : _name;
+	              // Note that newName can be undefined for two reasons:
+	              // 1. Because it is called as a getter and thus called with no arguments
+	              // 2. Because the property should actually be set to undefined. This happens e.g. if the
+	              //    input is invalid
+	              return arguments.length ? (_name = newName) : _name;
 	            }
 	          };
 	        }]);
@@ -25160,12 +25275,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   </example>
 	 */
 	var ngStyleDirective = ngDirective(function(scope, element, attr) {
-	  scope.$watchCollection(attr.ngStyle, function ngStyleWatchAction(newStyles, oldStyles) {
+	  scope.$watch(attr.ngStyle, function ngStyleWatchAction(newStyles, oldStyles) {
 	    if (oldStyles && (newStyles !== oldStyles)) {
 	      forEach(oldStyles, function(val, style) { element.css(style, '');});
 	    }
 	    if (newStyles) element.css(newStyles);
-	  });
+	  }, true);
 	});
 
 	/**
@@ -25211,7 +25326,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @scope
 	 * @priority 1200
-	 * @param {*} ngSwitch|on expression to match against <tt>ng-switch-when</tt>.
+	 * @param {*} ngSwitch|on expression to match against <code>ng-switch-when</code>.
 	 * On child elements add:
 	 *
 	 * * `ngSwitchWhen`: the case statement to match against. If match then this
@@ -25228,7 +25343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      <div ng-controller="ExampleController">
 	        <select ng-model="selection" ng-options="item for item in items">
 	        </select>
-	        <tt>selection={{selection}}</tt>
+	        <code>selection={{selection}}</code>
 	        <hr/>
 	        <div class="animate-switch-container"
 	          ng-switch on="selection">
@@ -25809,7 +25924,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            selectElement.val(viewValue);
 	            if (viewValue === '') emptyOption.prop('selected', true); // to make IE9 happy
 	          } else {
-	            if (isUndefined(viewValue) && emptyOption) {
+	            if (viewValue == null && emptyOption) {
 	              selectElement.val('');
 	            } else {
 	              selectCtrl.renderUnknownOption(viewValue);
@@ -26401,30 +26516,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	__webpack_require__(6);
 
-	var extend = __webpack_require__(7);
+	var extend = __webpack_require__(7),
+			equals = __webpack_require__(33);
 
 	module.exports = function() {
 		return {
 			restrict: 'E',
 			scope: {
-				visible: '='
+				visible: 	'=',
+				target:		'='
 			},
 			link: function(scope, element, attrs) {
-				var my 				= attrs.tooltipMy || 'center left',
-					at 				= attrs.tooltipAt || 'right center',
+				var my 					= attrs.tooltipMy || 'center left',
+					at 						= attrs.tooltipAt || 'right center',
+					content				= attrs.tooltipContent || attrs.tooltip,
 					tooltipClass 	= attrs.tooltipClass || 'tooltip',
-					content 		= attrs.tooltipContent || attrs.tooltip,
 					closeButton 	= scope.$eval(attrs.tooltipCloseButton) || false,
 					allowShow 		= scope.$eval(attrs.tooltipAllowShow) !== false,
 					allowHide 		= scope.$eval(attrs.tooltipAllowHide) !== false,
 					showEffect 		= scope.$eval(attrs.tooltipShowEffect) || false,
 					hideEffect 		= scope.$eval(attrs.tooltipHideEffect) || false,
 					hideDelay 		= scope.$eval(attrs.tooltipHideDelay) || false,
-					adjustX			= parseInt(attrs.tooltipAdjustX) || 0,
-					adjustY			= parseInt(attrs.tooltipAdjustY) || 0;
+					adjustX				= parseInt(attrs.tooltipAdjustX) || 0,
+					adjustY				= parseInt(attrs.tooltipAdjustY) || 0;
 
 				content = {
-					text: content
+					text: content || ''
 				};
 
 				if (attrs.tooltipTitle) {
@@ -26544,20 +26661,28 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 
 				$(element).qtip(qTipOptions);
-				
+
+				if (scope.target) {
+					scope.$watch('target', function (newValue, oldValue) {
+						if (!equals(newValue, oldValue)) {
+							$(element).qtip('content', newValue);
+						}
+					});
+				}
+
 				if (attrs.tooltipVisible === "true") {
 					scope.$watch('visible', function (newValue, oldValue) {
 						$(element).qtip('toggle', newValue);
 
 						if (newValue) {
-							var api = $('n17-tooltip-speechbubble').qtip('api');
-							api.reposition(null, false);
+							$('n17-tooltip-speechbubble').qtip('reposition', null, false);
 						}
 					});
 				}
 			}
 		};
 	};
+
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
@@ -39503,7 +39628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * Converts `value` to a string if it's not one. An empty string is returned
@@ -39525,7 +39650,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * Checks if `value` is object-like.
@@ -39585,7 +39710,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 18 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * The base implementation of `_.property` without support for deep paths.
@@ -39605,7 +39730,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 19 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * Used as the [maximum length](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.max_safe_integer)
@@ -39631,7 +39756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 20 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
@@ -39800,7 +39925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 24 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -39925,7 +40050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 27 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * Copies properties of `source` to `object`.
@@ -40049,7 +40174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 30 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * This method returns the first argument provided to it.
@@ -40109,7 +40234,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 32 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/** Used as the `TypeError` message for "Functions" methods. */
 	var FUNC_ERROR_TEXT = 'Expected a function';
@@ -40169,6 +40294,501 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports = restParam;
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseIsEqual = __webpack_require__(34),
+	    bindCallback = __webpack_require__(29);
+
+	/**
+	 * Performs a deep comparison between two values to determine if they are
+	 * equivalent. If `customizer` is provided it is invoked to compare values.
+	 * If `customizer` returns `undefined` comparisons are handled by the method
+	 * instead. The `customizer` is bound to `thisArg` and invoked with three
+	 * arguments: (value, other [, index|key]).
+	 *
+	 * **Note:** This method supports comparing arrays, booleans, `Date` objects,
+	 * numbers, `Object` objects, regexes, and strings. Objects are compared by
+	 * their own, not inherited, enumerable properties. Functions and DOM nodes
+	 * are **not** supported. Provide a customizer function to extend support
+	 * for comparing other values.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @alias eq
+	 * @category Lang
+	 * @param {*} value The value to compare.
+	 * @param {*} other The other value to compare.
+	 * @param {Function} [customizer] The function to customize value comparisons.
+	 * @param {*} [thisArg] The `this` binding of `customizer`.
+	 * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+	 * @example
+	 *
+	 * var object = { 'user': 'fred' };
+	 * var other = { 'user': 'fred' };
+	 *
+	 * object == other;
+	 * // => false
+	 *
+	 * _.isEqual(object, other);
+	 * // => true
+	 *
+	 * // using a customizer callback
+	 * var array = ['hello', 'goodbye'];
+	 * var other = ['hi', 'goodbye'];
+	 *
+	 * _.isEqual(array, other, function(value, other) {
+	 *   if (_.every([value, other], RegExp.prototype.test, /^h(?:i|ello)$/)) {
+	 *     return true;
+	 *   }
+	 * });
+	 * // => true
+	 */
+	function isEqual(value, other, customizer, thisArg) {
+	  customizer = typeof customizer == 'function' ? bindCallback(customizer, thisArg, 3) : undefined;
+	  var result = customizer ? customizer(value, other) : undefined;
+	  return  result === undefined ? baseIsEqual(value, other, customizer) : !!result;
+	}
+
+	module.exports = isEqual;
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseIsEqualDeep = __webpack_require__(35),
+	    isObject = __webpack_require__(20),
+	    isObjectLike = __webpack_require__(15);
+
+	/**
+	 * The base implementation of `_.isEqual` without support for `this` binding
+	 * `customizer` functions.
+	 *
+	 * @private
+	 * @param {*} value The value to compare.
+	 * @param {*} other The other value to compare.
+	 * @param {Function} [customizer] The function to customize comparing values.
+	 * @param {boolean} [isLoose] Specify performing partial comparisons.
+	 * @param {Array} [stackA] Tracks traversed `value` objects.
+	 * @param {Array} [stackB] Tracks traversed `other` objects.
+	 * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+	 */
+	function baseIsEqual(value, other, customizer, isLoose, stackA, stackB) {
+	  if (value === other) {
+	    return true;
+	  }
+	  if (value == null || other == null || (!isObject(value) && !isObjectLike(other))) {
+	    return value !== value && other !== other;
+	  }
+	  return baseIsEqualDeep(value, other, baseIsEqual, customizer, isLoose, stackA, stackB);
+	}
+
+	module.exports = baseIsEqual;
+
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var equalArrays = __webpack_require__(36),
+	    equalByTag = __webpack_require__(38),
+	    equalObjects = __webpack_require__(39),
+	    isArray = __webpack_require__(23),
+	    isTypedArray = __webpack_require__(40);
+
+	/** `Object#toString` result references. */
+	var argsTag = '[object Arguments]',
+	    arrayTag = '[object Array]',
+	    objectTag = '[object Object]';
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the [`toStringTag`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+
+	/**
+	 * A specialized version of `baseIsEqual` for arrays and objects which performs
+	 * deep comparisons and tracks traversed objects enabling objects with circular
+	 * references to be compared.
+	 *
+	 * @private
+	 * @param {Object} object The object to compare.
+	 * @param {Object} other The other object to compare.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {Function} [customizer] The function to customize comparing objects.
+	 * @param {boolean} [isLoose] Specify performing partial comparisons.
+	 * @param {Array} [stackA=[]] Tracks traversed `value` objects.
+	 * @param {Array} [stackB=[]] Tracks traversed `other` objects.
+	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+	 */
+	function baseIsEqualDeep(object, other, equalFunc, customizer, isLoose, stackA, stackB) {
+	  var objIsArr = isArray(object),
+	      othIsArr = isArray(other),
+	      objTag = arrayTag,
+	      othTag = arrayTag;
+
+	  if (!objIsArr) {
+	    objTag = objToString.call(object);
+	    if (objTag == argsTag) {
+	      objTag = objectTag;
+	    } else if (objTag != objectTag) {
+	      objIsArr = isTypedArray(object);
+	    }
+	  }
+	  if (!othIsArr) {
+	    othTag = objToString.call(other);
+	    if (othTag == argsTag) {
+	      othTag = objectTag;
+	    } else if (othTag != objectTag) {
+	      othIsArr = isTypedArray(other);
+	    }
+	  }
+	  var objIsObj = objTag == objectTag,
+	      othIsObj = othTag == objectTag,
+	      isSameTag = objTag == othTag;
+
+	  if (isSameTag && !(objIsArr || objIsObj)) {
+	    return equalByTag(object, other, objTag);
+	  }
+	  if (!isLoose) {
+	    var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
+	        othIsWrapped = othIsObj && hasOwnProperty.call(other, '__wrapped__');
+
+	    if (objIsWrapped || othIsWrapped) {
+	      return equalFunc(objIsWrapped ? object.value() : object, othIsWrapped ? other.value() : other, customizer, isLoose, stackA, stackB);
+	    }
+	  }
+	  if (!isSameTag) {
+	    return false;
+	  }
+	  // Assume cyclic values are equal.
+	  // For more information on detecting circular references see https://es5.github.io/#JO.
+	  stackA || (stackA = []);
+	  stackB || (stackB = []);
+
+	  var length = stackA.length;
+	  while (length--) {
+	    if (stackA[length] == object) {
+	      return stackB[length] == other;
+	    }
+	  }
+	  // Add `object` and `other` to the stack of traversed objects.
+	  stackA.push(object);
+	  stackB.push(other);
+
+	  var result = (objIsArr ? equalArrays : equalObjects)(object, other, equalFunc, customizer, isLoose, stackA, stackB);
+
+	  stackA.pop();
+	  stackB.pop();
+
+	  return result;
+	}
+
+	module.exports = baseIsEqualDeep;
+
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var arraySome = __webpack_require__(37);
+
+	/**
+	 * A specialized version of `baseIsEqualDeep` for arrays with support for
+	 * partial deep comparisons.
+	 *
+	 * @private
+	 * @param {Array} array The array to compare.
+	 * @param {Array} other The other array to compare.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {Function} [customizer] The function to customize comparing arrays.
+	 * @param {boolean} [isLoose] Specify performing partial comparisons.
+	 * @param {Array} [stackA] Tracks traversed `value` objects.
+	 * @param {Array} [stackB] Tracks traversed `other` objects.
+	 * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
+	 */
+	function equalArrays(array, other, equalFunc, customizer, isLoose, stackA, stackB) {
+	  var index = -1,
+	      arrLength = array.length,
+	      othLength = other.length;
+
+	  if (arrLength != othLength && !(isLoose && othLength > arrLength)) {
+	    return false;
+	  }
+	  // Ignore non-index properties.
+	  while (++index < arrLength) {
+	    var arrValue = array[index],
+	        othValue = other[index],
+	        result = customizer ? customizer(isLoose ? othValue : arrValue, isLoose ? arrValue : othValue, index) : undefined;
+
+	    if (result !== undefined) {
+	      if (result) {
+	        continue;
+	      }
+	      return false;
+	    }
+	    // Recursively compare arrays (susceptible to call stack limits).
+	    if (isLoose) {
+	      if (!arraySome(other, function(othValue) {
+	            return arrValue === othValue || equalFunc(arrValue, othValue, customizer, isLoose, stackA, stackB);
+	          })) {
+	        return false;
+	      }
+	    } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, customizer, isLoose, stackA, stackB))) {
+	      return false;
+	    }
+	  }
+	  return true;
+	}
+
+	module.exports = equalArrays;
+
+
+/***/ },
+/* 37 */
+/***/ function(module, exports) {
+
+	/**
+	 * A specialized version of `_.some` for arrays without support for callback
+	 * shorthands and `this` binding.
+	 *
+	 * @private
+	 * @param {Array} array The array to iterate over.
+	 * @param {Function} predicate The function invoked per iteration.
+	 * @returns {boolean} Returns `true` if any element passes the predicate check,
+	 *  else `false`.
+	 */
+	function arraySome(array, predicate) {
+	  var index = -1,
+	      length = array.length;
+
+	  while (++index < length) {
+	    if (predicate(array[index], index, array)) {
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+
+	module.exports = arraySome;
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports) {
+
+	/** `Object#toString` result references. */
+	var boolTag = '[object Boolean]',
+	    dateTag = '[object Date]',
+	    errorTag = '[object Error]',
+	    numberTag = '[object Number]',
+	    regexpTag = '[object RegExp]',
+	    stringTag = '[object String]';
+
+	/**
+	 * A specialized version of `baseIsEqualDeep` for comparing objects of
+	 * the same `toStringTag`.
+	 *
+	 * **Note:** This function only supports comparing values with tags of
+	 * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+	 *
+	 * @private
+	 * @param {Object} value The object to compare.
+	 * @param {Object} other The other object to compare.
+	 * @param {string} tag The `toStringTag` of the objects to compare.
+	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+	 */
+	function equalByTag(object, other, tag) {
+	  switch (tag) {
+	    case boolTag:
+	    case dateTag:
+	      // Coerce dates and booleans to numbers, dates to milliseconds and booleans
+	      // to `1` or `0` treating invalid dates coerced to `NaN` as not equal.
+	      return +object == +other;
+
+	    case errorTag:
+	      return object.name == other.name && object.message == other.message;
+
+	    case numberTag:
+	      // Treat `NaN` vs. `NaN` as equal.
+	      return (object != +object)
+	        ? other != +other
+	        : object == +other;
+
+	    case regexpTag:
+	    case stringTag:
+	      // Coerce regexes to strings and treat strings primitives and string
+	      // objects as equal. See https://es5.github.io/#x15.10.6.4 for more details.
+	      return object == (other + '');
+	  }
+	  return false;
+	}
+
+	module.exports = equalByTag;
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var keys = __webpack_require__(10);
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * A specialized version of `baseIsEqualDeep` for objects with support for
+	 * partial deep comparisons.
+	 *
+	 * @private
+	 * @param {Object} object The object to compare.
+	 * @param {Object} other The other object to compare.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {Function} [customizer] The function to customize comparing values.
+	 * @param {boolean} [isLoose] Specify performing partial comparisons.
+	 * @param {Array} [stackA] Tracks traversed `value` objects.
+	 * @param {Array} [stackB] Tracks traversed `other` objects.
+	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+	 */
+	function equalObjects(object, other, equalFunc, customizer, isLoose, stackA, stackB) {
+	  var objProps = keys(object),
+	      objLength = objProps.length,
+	      othProps = keys(other),
+	      othLength = othProps.length;
+
+	  if (objLength != othLength && !isLoose) {
+	    return false;
+	  }
+	  var index = objLength;
+	  while (index--) {
+	    var key = objProps[index];
+	    if (!(isLoose ? key in other : hasOwnProperty.call(other, key))) {
+	      return false;
+	    }
+	  }
+	  var skipCtor = isLoose;
+	  while (++index < objLength) {
+	    key = objProps[index];
+	    var objValue = object[key],
+	        othValue = other[key],
+	        result = customizer ? customizer(isLoose ? othValue : objValue, isLoose? objValue : othValue, key) : undefined;
+
+	    // Recursively compare objects (susceptible to call stack limits).
+	    if (!(result === undefined ? equalFunc(objValue, othValue, customizer, isLoose, stackA, stackB) : result)) {
+	      return false;
+	    }
+	    skipCtor || (skipCtor = key == 'constructor');
+	  }
+	  if (!skipCtor) {
+	    var objCtor = object.constructor,
+	        othCtor = other.constructor;
+
+	    // Non `Object` object instances with different constructors are not equal.
+	    if (objCtor != othCtor &&
+	        ('constructor' in object && 'constructor' in other) &&
+	        !(typeof objCtor == 'function' && objCtor instanceof objCtor &&
+	          typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+	      return false;
+	    }
+	  }
+	  return true;
+	}
+
+	module.exports = equalObjects;
+
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isLength = __webpack_require__(19),
+	    isObjectLike = __webpack_require__(15);
+
+	/** `Object#toString` result references. */
+	var argsTag = '[object Arguments]',
+	    arrayTag = '[object Array]',
+	    boolTag = '[object Boolean]',
+	    dateTag = '[object Date]',
+	    errorTag = '[object Error]',
+	    funcTag = '[object Function]',
+	    mapTag = '[object Map]',
+	    numberTag = '[object Number]',
+	    objectTag = '[object Object]',
+	    regexpTag = '[object RegExp]',
+	    setTag = '[object Set]',
+	    stringTag = '[object String]',
+	    weakMapTag = '[object WeakMap]';
+
+	var arrayBufferTag = '[object ArrayBuffer]',
+	    float32Tag = '[object Float32Array]',
+	    float64Tag = '[object Float64Array]',
+	    int8Tag = '[object Int8Array]',
+	    int16Tag = '[object Int16Array]',
+	    int32Tag = '[object Int32Array]',
+	    uint8Tag = '[object Uint8Array]',
+	    uint8ClampedTag = '[object Uint8ClampedArray]',
+	    uint16Tag = '[object Uint16Array]',
+	    uint32Tag = '[object Uint32Array]';
+
+	/** Used to identify `toStringTag` values of typed arrays. */
+	var typedArrayTags = {};
+	typedArrayTags[float32Tag] = typedArrayTags[float64Tag] =
+	typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
+	typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
+	typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
+	typedArrayTags[uint32Tag] = true;
+	typedArrayTags[argsTag] = typedArrayTags[arrayTag] =
+	typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
+	typedArrayTags[dateTag] = typedArrayTags[errorTag] =
+	typedArrayTags[funcTag] = typedArrayTags[mapTag] =
+	typedArrayTags[numberTag] = typedArrayTags[objectTag] =
+	typedArrayTags[regexpTag] = typedArrayTags[setTag] =
+	typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/**
+	 * Used to resolve the [`toStringTag`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+
+	/**
+	 * Checks if `value` is classified as a typed array.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isTypedArray(new Uint8Array);
+	 * // => true
+	 *
+	 * _.isTypedArray([]);
+	 * // => false
+	 */
+	function isTypedArray(value) {
+	  return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[objToString.call(value)];
+	}
+
+	module.exports = isTypedArray;
 
 
 /***/ }

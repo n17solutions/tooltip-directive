@@ -2,30 +2,32 @@
 
 require('qtip2');
 
-var extend = require('lodash/object/extend');
+var extend = require('lodash/object/extend'),
+		equals = require('lodash/lang/isEqual');
 
 module.exports = function() {
 	return {
 		restrict: 'E',
 		scope: {
-			visible: '='
+			visible: 	'=',
+			target:		'='
 		},
 		link: function(scope, element, attrs) {
-			var my 				= attrs.tooltipMy || 'center left',
-				at 				= attrs.tooltipAt || 'right center',
+			var my 					= attrs.tooltipMy || 'center left',
+				at 						= attrs.tooltipAt || 'right center',
+				content				= attrs.tooltipContent || attrs.tooltip,
 				tooltipClass 	= attrs.tooltipClass || 'tooltip',
-				content 		= attrs.tooltipContent || attrs.tooltip,
 				closeButton 	= scope.$eval(attrs.tooltipCloseButton) || false,
 				allowShow 		= scope.$eval(attrs.tooltipAllowShow) !== false,
 				allowHide 		= scope.$eval(attrs.tooltipAllowHide) !== false,
 				showEffect 		= scope.$eval(attrs.tooltipShowEffect) || false,
 				hideEffect 		= scope.$eval(attrs.tooltipHideEffect) || false,
 				hideDelay 		= scope.$eval(attrs.tooltipHideDelay) || false,
-				adjustX			= parseInt(attrs.tooltipAdjustX) || 0,
-				adjustY			= parseInt(attrs.tooltipAdjustY) || 0;
+				adjustX				= parseInt(attrs.tooltipAdjustX) || 0,
+				adjustY				= parseInt(attrs.tooltipAdjustY) || 0;
 
 			content = {
-				text: content
+				text: content || ''
 			};
 
 			if (attrs.tooltipTitle) {
@@ -145,14 +147,21 @@ module.exports = function() {
 			}
 
 			$(element).qtip(qTipOptions);
-			
+
+			if (scope.target) {
+				scope.$watch('target', function (newValue, oldValue) {
+					if (!equals(newValue, oldValue)) {
+						$(element).qtip('content', newValue);
+					}
+				});
+			}
+
 			if (attrs.tooltipVisible === "true") {
 				scope.$watch('visible', function (newValue, oldValue) {
 					$(element).qtip('toggle', newValue);
 
 					if (newValue) {
-						var api = $('n17-tooltip-speechbubble').qtip('api');
-						api.reposition(null, false);
+						$('n17-tooltip-speechbubble').qtip('reposition', null, false);
 					}
 				});
 			}

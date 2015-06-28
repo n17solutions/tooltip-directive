@@ -1,6 +1,6 @@
 {
   "name": "n17-tooltip",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "homepage": "https://github.com/wooderz/tooltip-directive",
   "authors": [
     "James Woodley <info@n17solutions.com>"
@@ -30,6 +30,7 @@
     "jquery": "~2.1.4"
   },
   "dependencies": {
-    "qtip2": "~2.2.1"
+    "qtip2": "~2.2.1",
+    "lodash": "~3.9.3"
   }
 }
