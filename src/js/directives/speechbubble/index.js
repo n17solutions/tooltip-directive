@@ -148,13 +148,11 @@ module.exports = function() {
 
 			$(element).qtip(qTipOptions);
 
-			if (scope.expression) {
-				scope.$watch('expression', function (newValue, oldValue) {
-					if (!equals(newValue, oldValue)) {
-						$(element).qtip('content', newValue);
-					}
-				});
-			}
+			scope.$watch('expression', function (newValue, oldValue) {
+				if (!equals(newValue, oldValue)) {
+					$(element).qtip('content', newValue);
+				}
+			});
 
 			if (attrs.tooltipVisible === "true") {
 				scope.$watch('visible', function (newValue, oldValue) {
